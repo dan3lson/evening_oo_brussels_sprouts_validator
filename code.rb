@@ -28,14 +28,23 @@ class Ingredient
 
   def self.parse(string)
     array = string.split(" ")
-    quantity = array[0].to_f
+    quantity = array[0].to_f.to_s
     unit = array[1]
     name = array.delete_if { |val|
       val.include?(".") ||
       val.include?("(") ||
-      val.include?(")")
+      val.include?(")") ||
+      val.start_with?("1") ||
+      val.start_with?("2") ||
+      val.start_with?("3") ||
+      val.start_with?("4") ||
+      val.start_with?("5") ||
+      val.start_with?("6") ||
+      val.start_with?("7") ||
+      val.start_with?("8") ||
+      val.start_with?("9")
     }
-    name.join(" ")
+    name = name.join(" ")
 
     Ingredient.new(quantity, unit, name)
   end
@@ -72,8 +81,14 @@ class Recipe
   end
 
   def can_have_dish?
+    killer_foods = []
     ingredients.each do |ingredient|
-      return true if ingredient.allowed?
+      killer_foods << ingredient.allowed?
+    end
+    if killer_foods.include?(false)
+      false
+    else
+      true
     end
   end
 
@@ -108,9 +123,9 @@ ingredients = [
   {
     horizons: [
       Ingredient.new(1.5, "lb(s)", "Brussels sprouts"),
-      Ingredient.new(3.0, "tbspn(s)", "Good olive oil"),
-      Ingredient.new(0.75, "tspn(s)", "Kosher salt"),
-      Ingredient.new(0.5, "tspn(s)", "Freshly ground black pepper")
+      Ingredient.new(3.0, "tbspn(s)", "Spinach"),
+      Ingredient.new(0.75, "tspn(s)", "chocolate"),
+      Ingredient.new(0.5, "tspn(s)", "seitan")
     ]
   },
   {
@@ -161,4 +176,5 @@ danelsons_recipe = Recipe.new(
 
 puts horizons_recipe.summary
 puts danelsons_recipe.summary
+
 puts Ingredient.parse("47 lb(s) Brussels sprouts")
