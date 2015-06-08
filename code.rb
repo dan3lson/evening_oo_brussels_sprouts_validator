@@ -2,7 +2,7 @@ require "pry"
 
 class Ingredient
 
-  attr_reader :name
+  attr_reader :quantity, :unit, :name
 
   VALID_INGREDIENTS = [
     "brussels sprouts",
@@ -28,9 +28,9 @@ class Ingredient
 
   def self.parse(string)
     array = string.split(" ")
-    quantity = array[0].to_f.to_s
-    unit = array[1]
-    name = array.delete_if { |val|
+    amount = array[0].to_f.to_s
+    number = array[1]
+    title = array.delete_if { |val|
       val.include?(".") ||
       val.include?("(") ||
       val.include?(")") ||
@@ -44,9 +44,10 @@ class Ingredient
       val.start_with?("8") ||
       val.start_with?("9")
     }
-    name = name.join(" ")
+    title = title.join(" ")
 
-    Ingredient.new(quantity, unit, name)
+    # Ingredient.new(amount, number, title)
+    "#{amount} #{number} #{title}"
   end
 
   def allowed?
